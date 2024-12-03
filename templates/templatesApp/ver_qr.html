@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR de Reserva</title>
+</head>
+<body>
+    <h1>QR de la Reserva</h1>
+    <img src="{{ reserva.codigo_qr.url }}" alt="QR Code">
+    <p>Reserva ID: {{ reserva.idSolicitud }}</p>
+    <a href="/">Volver</a>
+</body>
+</html>

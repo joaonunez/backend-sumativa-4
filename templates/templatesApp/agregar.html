@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <title>Administración de Reservas</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f9f9f9, #e3f2fd);
+            font-family: 'Roboto', sans-serif;
+        }
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            border-radius: 25px;
+        }
+        input[type="text"], input[type="email"], input[type="number"], 
+        input[type="date"], input[type="time"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #6c63ff;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"]:focus, input[type="email"]:focus, 
+        input[type="number"]:focus, input[type="date"]:focus, 
+        input[type="time"]:focus, select:focus, textarea:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+            outline: none;
+        }
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table thead {
+            background: #6c63ff;
+            color: white;
+        }
+        .table tbody tr:hover {
+            background: rgba(108, 99, 255, 0.1);
+        }
+        .footer {
+            background: #6c63ff;
+            color: white;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold" style="color: #6c63ff;">Administración de Reservas</h1>
+        <p class="text-muted">Gestiona tus reservas con estilo y eficiencia</p>
+    </div>
+    
+    <!-- Formulario -->
+    <div class="card mb-5">
+        <div class="card-header text-white" style="background: #6c63ff;">
+            <h5 class="card-title mb-0">Formulario de Reserva</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3">
+                    {% for field in form %}
+                    <div class="col-md-6">
+                        <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-primary px-4 py-2">
+                        <i class="bi bi-save-fill"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla de Reservas -->
+{% if reservas %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Fecha Reserva</th>
+                <th>Hora Reserva</th>
+                <th>Website</th>
+                <th>Estado</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas %}
+            <tr>
+                <td>{{ reserva.nombre }}</td>
+                <td>{{ reserva.telefono }}</td>
+                <td>{{ reserva.fechareserva }}</td>
+                <td>{{ reserva.horareserva }}</td>
+                <td><a href="{{ reserva.website }}" target="_blank" class="text-primary text-decoration-none">{{ reserva.website }}</a></td>
+                <td>{{ reserva.estadoReservaId }}</td>
+                <td>{{ reserva.email }}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'actualizar_reserva' reserva.idSolicitud %}" class="btn btn-outline-warning btn-sm">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="{% url 'eliminar_reserva' reserva.idSolicitud %}" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                        <a href="{% url 'ver_qr' reserva.idSolicitud %}" target="_blank" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-qr-code"></i>
+                        </a>
+                        <a href="{% url 'generar_pdf' reserva.idSolicitud %}" target="_blank" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-file-earmark-pdf"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-warning text-center">
+    <i class="bi bi-exclamation-circle-fill"></i> No se encuentran reservas en el sistema.
+</div>
+{% endif %}
+
+
+    <footer class="footer text-center mt-5">
+        <small>© 2024 Sistema de Administración de Reservas. Diseñado con <i class="bi bi-heart-fill text-danger"></i></small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF de Reserva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin: 20px;
+        }
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Detalles de la Reserva</h1>
+    </div>
+    <div class="content">
+        <p><strong>ID:</strong> {{ reserva.idSolicitud }}</p>
+        <p><strong>Nombre:</strong> {{ reserva.nombre }}</p>
+        <p><strong>Teléfono:</strong> {{ reserva.telefono }}</p>
+        <p><strong>Fecha:</strong> {{ reserva.fechareserva }}</p>
+        <p><strong>Hora:</strong> {{ reserva.horareserva }}</p>
+        <p><strong>Email:</strong> {{ reserva.email }}</p>
+        <p><strong>Estado:</strong> {{ reserva.estadoReservaId }}</p>
+        <p><strong>Tipo de Solicitud:</strong> {{ reserva.tipoSolicitudId }}</p>
+    </div>
+
+    <div class="image-container">
+        {% if foto_paciente_url %}
+            <h3>Foto del Paciente</h3>
+            <img src="{{ foto_paciente_url }}" alt="Foto del Paciente">
+        {% endif %}
+        {% if codigo_qr_url %}
+            <h3>Código QR</h3>
+            <img src="{{ codigo_qr_url }}" alt="Código QR">
+        {% endif %}
+    </div>
+</body>
+</html>
